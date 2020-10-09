@@ -1,0 +1,20 @@
+[package]
+name = "rdbc"
+version = "0.1.0"
+authors = ["Ben Sully <ben@bsull.io>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-trait = { version = "0.1", optional = true }
+futures-util = { version = "0.3", optional = true }
+tokio = { version = "0.2", optional = true }
+
+[features]
+async = [
+    "async-trait",
+    "futures-util",
+    "tokio",
+]
+sync = []

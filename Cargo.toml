@@ -1,0 +1,8 @@
+[workspace]
+
+members = [
+    "rdbc",
+    "rdbc-postgres",
+    "rdbc-tokio-postgres",
+]
+
