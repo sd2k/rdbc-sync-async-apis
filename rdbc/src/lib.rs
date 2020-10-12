@@ -63,10 +63,10 @@ pub trait Row {
     type Error;
     fn get<'a, T>(&'a self, i: usize) -> Result<T, Self::Error>
     where
-        T: FromSqlRow<'a, Self::Backend, Self::Error>;
+        T: FromRow<'a, Self::Backend, Self::Error>;
 }
 
-pub trait FromSqlRow<'a, B, E>: Sized
+pub trait FromRow<'a, B, E>: Sized
 where
     B: Backend,
 {

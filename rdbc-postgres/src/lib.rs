@@ -190,16 +190,16 @@ impl rdbc::Row for PostgresRow {
 
     fn get<'a, T>(&'a self, i: usize) -> Result<T, Self::Error>
     where
-        T: rdbc::FromSqlRow<'a, Self::Backend, Self::Error>,
+        T: rdbc::FromRow<'a, Self::Backend, Self::Error>,
     {
         T::from_row(&self.inner, i)
     }
 }
 
-macro_rules! impl_from_sql_row {
+macro_rules! impl_from_row {
     ($($ty: ty),* $(,)?) => {
         $(
-            impl<'a> rdbc::FromSqlRow<'a, PostgresDriver, Error> for $ty {
+            impl<'a> rdbc::FromRow<'a, PostgresDriver, Error> for $ty {
                 fn from_row(row: &'a Row, i: usize) -> Result<Self, Error> {
                     Ok(row.try_get(i)?)
                 }
@@ -208,7 +208,7 @@ macro_rules! impl_from_sql_row {
     };
 }
 
-impl_from_sql_row! {
+impl_from_row! {
     bool,
     i8,
     i16,
@@ -224,21 +224,21 @@ impl_from_sql_row! {
     std::time::SystemTime,
 }
 
-impl<'a> rdbc::FromSqlRow<'a, PostgresDriver, Error> for &'a str {
+impl<'a> rdbc::FromRow<'a, PostgresDriver, Error> for &'a str {
     fn from_row(row: &'a Row, i: usize) -> Result<Self, Error> {
         Ok(row.try_get(i)?)
     }
 }
 
-impl<'a> rdbc::FromSqlRow<'a, PostgresDriver, Error> for &'a [u8] {
+impl<'a> rdbc::FromRow<'a, PostgresDriver, Error> for &'a [u8] {
     fn from_row(row: &'a Row, i: usize) -> Result<Self, Error> {
         Ok(row.try_get(i)?)
     }
 }
 
-impl<'a, T> rdbc::FromSqlRow<'a, PostgresDriver, Error> for Option<T>
+impl<'a, T> rdbc::FromRow<'a, PostgresDriver, Error> for Option<T>
 where
-    T: rdbc::FromSqlRow<'a, PostgresDriver, Error>,
+    T: rdbc::FromRow<'a, PostgresDriver, Error>,
     for<'b> T: FromSql<'b>,
 {
     fn from_row(row: &'a Row, i: usize) -> Result<Self, Error> {
